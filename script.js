@@ -94,52 +94,170 @@ function highlightJson(json) {
     });
 }
 
-// Apply highlighting to the initial preview
-const previewElement = document.getElementById('schemaPreview');
-previewElement.innerHTML = highlightJson(previewElement.textContent);
+// Initialize form fields and preview on page load
+document.addEventListener('DOMContentLoaded', function() {
+  const initialSchemaType = document.getElementById('schemaType').value;
+  generateFormFields(initialSchemaType);
+  updatePreview();
+});
+
+// Form field configurations for each schema type
+const schemaFormConfigs = {
+  organization: [
+    { id: 'orgName', label: 'Organization Name', type: 'text', placeholder: 'e.g., Google LLC' },
+    { id: 'orgUrl', label: 'Website URL', type: 'url', placeholder: 'e.g., https://www.google.com' },
+    { id: 'orgLogo', label: 'Logo URL', type: 'url', placeholder: 'e.g., https://www.google.com/logo.png' }
+  ],
+  localBusiness: [
+    { id: 'businessName', label: 'Business Name', type: 'text', placeholder: 'e.g., Joe\'s Coffee Shop' },
+    { id: 'businessAddress', label: 'Address', type: 'text', placeholder: 'e.g., 123 Main St, City, State 12345' },
+    { id: 'businessPhone', label: 'Phone Number', type: 'tel', placeholder: 'e.g., +1-555-123-4567' },
+    { id: 'businessUrl', label: 'Website URL', type: 'url', placeholder: 'e.g., https://www.joescoffee.com' }
+  ],
+  article: [
+    { id: 'articleHeadline', label: 'Article Headline', type: 'text', placeholder: 'e.g., How to Create Schema Markup' },
+    { id: 'articleAuthor', label: 'Author Name', type: 'text', placeholder: 'e.g., John Doe' },
+    { id: 'articleDate', label: 'Published Date', type: 'date', placeholder: '' },
+    { id: 'articleImage', label: 'Featured Image URL', type: 'url', placeholder: 'e.g., https://example.com/article-image.jpg' }
+  ],
+  product: [
+    { id: 'productName', label: 'Product Name', type: 'text', placeholder: 'e.g., iPhone 15 Pro' },
+    { id: 'productImage', label: 'Product Image URL', type: 'url', placeholder: 'e.g., https://example.com/product-image.jpg' },
+    { id: 'productDescription', label: 'Description', type: 'textarea', placeholder: 'e.g., Latest iPhone with advanced features' },
+    { id: 'productSku', label: 'SKU', type: 'text', placeholder: 'e.g., IP15P-128-BLU' },
+    { id: 'productBrand', label: 'Brand Name', type: 'text', placeholder: 'e.g., Apple' }
+  ],
+  event: [
+    { id: 'eventName', label: 'Event Name', type: 'text', placeholder: 'e.g., Tech Conference 2024' },
+    { id: 'eventStartDate', label: 'Start Date', type: 'datetime-local', placeholder: '' },
+    { id: 'eventEndDate', label: 'End Date', type: 'datetime-local', placeholder: '' },
+    { id: 'eventLocation', label: 'Location', type: 'text', placeholder: 'e.g., Convention Center, New York' },
+    { id: 'eventDescription', label: 'Description', type: 'textarea', placeholder: 'e.g., Annual technology conference featuring latest innovations' }
+  ],
+  person: [
+    { id: 'personName', label: 'Full Name', type: 'text', placeholder: 'e.g., John Doe' },
+    { id: 'personJobTitle', label: 'Job Title', type: 'text', placeholder: 'e.g., Software Engineer' },
+    { id: 'personCompany', label: 'Company', type: 'text', placeholder: 'e.g., Google LLC' },
+    { id: 'personEmail', label: 'Email', type: 'email', placeholder: 'e.g., john.doe@example.com' }
+  ],
+  webpage: [
+    { id: 'webpageName', label: 'Page Title', type: 'text', placeholder: 'e.g., About Us - Company Name' },
+    { id: 'webpageDescription', label: 'Page Description', type: 'textarea', placeholder: 'e.g., Learn more about our company and mission' },
+    { id: 'webpageUrl', label: 'Page URL', type: 'url', placeholder: 'e.g., https://example.com/about' }
+  ]
+};
+
+// Function to generate form fields based on schema type
+function generateFormFields(schemaType) {
+  const formContainer = document.getElementById('formContainer');
+  const config = schemaFormConfigs[schemaType] || schemaFormConfigs.organization;
+  
+  formContainer.innerHTML = '';
+  
+  config.forEach(field => {
+    const fieldDiv = document.createElement('div');
+    fieldDiv.className = 'mb-3';
+    
+    const label = document.createElement('label');
+    label.setAttribute('for', field.id);
+    label.className = 'form-label';
+    label.textContent = field.label;
+    
+    let input;
+    if (field.type === 'textarea') {
+      input = document.createElement('textarea');
+      input.className = 'form-control';
+      input.rows = 3;
+    } else {
+      input = document.createElement('input');
+      input.type = field.type;
+      input.className = 'form-control';
+    }
+    
+    input.id = field.id;
+    input.placeholder = field.placeholder;
+    
+    // Add event listener for real-time preview updates
+    input.addEventListener('input', updatePreview);
+    
+    fieldDiv.appendChild(label);
+    fieldDiv.appendChild(input);
+    formContainer.appendChild(fieldDiv);
+  });
+}
+
+// Function to update preview based on current form values
+function updatePreview() {
+  const schemaType = document.getElementById('schemaType').value;
+  const previewElement = document.getElementById('schemaPreview');
+  
+  let schemaData = {
+    "@context": "https://schema.org"
+  };
+  
+  // Get form values and build schema based on type
+  if (schemaType === 'organization') {
+    schemaData["@type"] = "Organization";
+    schemaData.name = document.getElementById('orgName')?.value || "Your Organization Name";
+    schemaData.url = document.getElementById('orgUrl')?.value || "https://example.com";
+    schemaData.logo = document.getElementById('orgLogo')?.value || "https://example.com/logo.png";
+  } else if (schemaType === 'localBusiness') {
+    schemaData["@type"] = "LocalBusiness";
+    schemaData.name = document.getElementById('businessName')?.value || "Your Business Name";
+    schemaData.address = document.getElementById('businessAddress')?.value || "123 Main St, City, State";
+    schemaData.telephone = document.getElementById('businessPhone')?.value || "+1-555-123-4567";
+    schemaData.url = document.getElementById('businessUrl')?.value || "https://yourbusiness.com";
+  } else if (schemaType === 'article') {
+    schemaData["@type"] = "Article";
+    schemaData.headline = document.getElementById('articleHeadline')?.value || "Article Title";
+    schemaData.author = {
+      "@type": "Person",
+      "name": document.getElementById('articleAuthor')?.value || "Author Name"
+    };
+    schemaData.datePublished = document.getElementById('articleDate')?.value || "2023-01-01";
+    schemaData.image = document.getElementById('articleImage')?.value || "https://example.com/article-image.jpg";
+  } else if (schemaType === 'product') {
+    schemaData["@type"] = "Product";
+    schemaData.name = document.getElementById('productName')?.value || "Product Name";
+    schemaData.image = document.getElementById('productImage')?.value || "https://example.com/product-image.jpg";
+    schemaData.description = document.getElementById('productDescription')?.value || "Product description";
+    schemaData.sku = document.getElementById('productSku')?.value || "0446310786";
+    schemaData.brand = {
+      "@type": "Brand",
+      "name": document.getElementById('productBrand')?.value || "Brand Name"
+    };
+  } else if (schemaType === 'event') {
+    schemaData["@type"] = "Event";
+    schemaData.name = document.getElementById('eventName')?.value || "Event Name";
+    schemaData.startDate = document.getElementById('eventStartDate')?.value || "2024-01-01T10:00:00";
+    schemaData.endDate = document.getElementById('eventEndDate')?.value || "2024-01-01T18:00:00";
+    schemaData.location = document.getElementById('eventLocation')?.value || "Event Location";
+    schemaData.description = document.getElementById('eventDescription')?.value || "Event description";
+  } else if (schemaType === 'person') {
+    schemaData["@type"] = "Person";
+    schemaData.name = document.getElementById('personName')?.value || "Person Name";
+    schemaData.jobTitle = document.getElementById('personJobTitle')?.value || "Job Title";
+    schemaData.worksFor = {
+      "@type": "Organization",
+      "name": document.getElementById('personCompany')?.value || "Company Name"
+    };
+    schemaData.email = document.getElementById('personEmail')?.value || "person@example.com";
+  } else if (schemaType === 'webpage') {
+    schemaData["@type"] = "WebPage";
+    schemaData.name = document.getElementById('webpageName')?.value || "Page Title";
+    schemaData.description = document.getElementById('webpageDescription')?.value || "Page description";
+    schemaData.url = document.getElementById('webpageUrl')?.value || "https://example.com/page";
+  }
+  
+  previewElement.textContent = JSON.stringify(schemaData, null, 2);
+  previewElement.innerHTML = highlightJson(previewElement.textContent);
+}
 
 // Schema type change handler
 document.getElementById('schemaType').addEventListener('change', function() {
-  // In a real app, this would generate different form fields based on schema type
   const schemaType = this.value;
-  const previewElement = document.getElementById('schemaPreview');
-  
-  // Simple example of changing preview based on schema type
-  if (schemaType === 'article') {
-    previewElement.textContent = `{
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": "Article Title",
-  "author": {
-    "@type": "Person",
-    "name": "Author Name"
-  },
-  "datePublished": "2023-01-01"
-}`;
-  } else if (schemaType === 'product') {
-    previewElement.textContent = `{
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "name": "Product Name",
-  "image": "https://example.com/product-image.jpg",
-  "description": "Product description",
-  "sku": "0446310786",
-  "brand": {
-    "@type": "Brand",
-    "name": "Brand Name"
-  }
-}`;
-  } else {
-    previewElement.textContent = `{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Your Organization Name",
-  "url": "https://example.com",
-  "logo": "https://example.com/logo.png"
-}`;
-  }
-  
-  previewElement.innerHTML = highlightJson(previewElement.textContent);
+  generateFormFields(schemaType);
+  updatePreview();
 });
 
 // Create implementation modal on the fly
