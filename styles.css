@@ -1,0 +1,181 @@
+:root {
+  --primary: #4361ee;
+  --secondary: #3a0ca3;
+  --success: #4cc9f0;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --gray: #6c757d;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+.dark-mode {
+  --primary: #4cc9f0;
+  --secondary: #4361ee;
+  --light: #121212;
+  --dark: #f8f9fa;
+  --gray: #adb5bd;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+body {
+  background-color: var(--light);
+  color: var(--dark);
+  transition: var(--transition);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-bg {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  box-shadow: var(--box-shadow);
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.card {
+  background-color: var(--dark);
+  color: var(--light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  border: none;
+}
+
+.card-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+.form-control, .form-select {
+  background-color: var(--light);
+  color: var(--dark);
+  border: 1px solid var(--gray);
+  transition: var(--transition);
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+}
+
+.btn {
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+#schemaPreview {
+  background-color: #2d2d2d;
+  color: #f8f8f2;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  overflow-x: auto;
+  max-height: 400px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.validation-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  background-color: #28a745;
+  color: white;
+  border-radius: 50px;
+  font-size: 0.8rem;
+}
+
+.validation-badge.error {
+  background-color: #dc3545;
+}
+
+.footer-bg {
+  background-color: var(--dark);
+  color: var(--light);
+}
+
+.footer-link {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer-link:hover {
+  color: var(--secondary);
+}
+
+/* Syntax highlighting for JSON */
+.json-key { color: #f92672; }
+.json-string { color: #a6e22e; }
+.json-number { color: #ae81ff; }
+.json-boolean { color: #ae81ff; }
+.json-null { color: #ae81ff; }
+
+/* Alternative UI Approach - Tabbed Interface */
+.tab-content {
+  padding: 1rem 0;
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--dark);
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-tabs .nav-link.active {
+  background: transparent;
+  color: var(--primary);
+  border-bottom: 3px solid var(--primary);
+}
+
+.dark-mode .nav-tabs .nav-link {
+  color: var(--light);
+}
+
+.dark-mode .nav-tabs .nav-link.active {
+  color: var(--primary);
+}
+
+/* Alternative UI Approach - Vertical Layout */
+.vertical-layout .sidebar {
+  background-color: var(--dark);
+  color: var(--light);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  height: fit-content;
+}
+
+.vertical-layout .main-content {
+  padding-left: 2rem;
+}
+
+@media (max-width: 992px) {
+  .vertical-layout .main-content {
+    padding-left: 0;
+    padding-top: 2rem;
+  }
+}
