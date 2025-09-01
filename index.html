@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Schema Generator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>🧠 Structured Data Generator</h1>
+    <p>Generate JSON-LD or Microdata for common schema types</p>
+  </header>
+
+  <main>
+    <section class="controls">
+      <label for="schemaType">Schema Type:</label>
+      <select id="schemaType">
+        <option value="organization">Organization</option>
+        <option value="localBusiness">Local Business</option>
+        <option value="article">Article</option>
+        <option value="webpage">WebPage</option>
+      </select>
+
+      <label for="formatToggle">Format:</label>
+      <select id="formatToggle">
+        <option value="jsonld">JSON-LD</option>
+        <option value="microdata">Microdata</option>
+      </select>
+    </section>
+
+    <section id="formContainer">
+      <!-- Dynamic form fields will be injected here -->
+    </section>
+
+    <section id="previewContainer">
+      <h2>🔍 Preview</h2>
+      <pre id="schemaPreview"></pre>
+      <button id="copyBtn">📋 Copy to Clipboard</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>Built by Anupam • <a href="https://github.com/your-username/schema-generator" target="_blank">GitHub Repo</a></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
