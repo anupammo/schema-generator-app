@@ -3,47 +3,510 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Schema Generator</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>SchemaPro - Structured Data Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --secondary: #3a0ca3;
+      --success: #4cc9f0;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    .dark-mode {
+      --primary: #4cc9f0;
+      --secondary: #4361ee;
+      --light: #121212;
+      --dark: #f8f9fa;
+      --gray: #adb5bd;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+      transition: var(--transition);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 1.5rem 0;
+      box-shadow: var(--box-shadow);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .logo-icon {
+      font-size: 2rem;
+    }
+
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      width: 50px;
+      height: 26px;
+      border-radius: 50px;
+      padding: 3px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      transition: var(--transition);
+    }
+
+    .theme-toggle span {
+      display: inline-block;
+      background: white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+
+    .dark-mode .theme-toggle {
+      justify-content: flex-end;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-top: 5px;
+    }
+
+    main {
+      flex: 1;
+      padding: 2rem 0;
+    }
+
+    .card {
+      background-color: var(--dark);
+      color: var(--light);
+      border-radius: var(--border-radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    select, input, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--gray);
+      border-radius: var(--border-radius);
+      background-color: var(--light);
+      color: var(--dark);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0.75rem 1.5rem;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn:hover {
+      background-color: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-success {
+      background-color: var(--success);
+    }
+
+    .btn-success:hover {
+      background-color: #3aa8d0;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    #schemaPreview {
+      background-color: #2d2d2d;
+      color: #f8f8f2;
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      overflow-x: auto;
+      max-height: 400px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .validation-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0.25rem 0.5rem;
+      background-color: #28a745;
+      color: white;
+      border-radius: 50px;
+      font-size: 0.8rem;
+    }
+
+    .validation-badge.error {
+      background-color: #dc3545;
+    }
+
+    footer {
+      background-color: var(--dark);
+      color: var(--light);
+      padding: 1.5rem 0;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .footer-links a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: var(--secondary);
+    }
+
+    @media (max-width: 768px) {
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+
+    /* Syntax highlighting for JSON */
+    .json-key { color: #f92672; }
+    .json-string { color: #a6e22e; }
+    .json-number { color: #ae81ff; }
+    .json-boolean { color: #ae81ff; }
+    .json-null { color: #ae81ff; }
+  </style>
 </head>
 <body>
   <header>
-    <h1>🧠 Structured Data Generator</h1>
-    <p>Generate JSON-LD or Microdata for common schema types</p>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <div class="logo-icon"><i class="fas fa-brain"></i></div>
+          <div>
+            <h1>SchemaPro Generator</h1>
+            <p class="subtitle">Create, validate & implement structured data with ease</p>
+          </div>
+        </div>
+        <button class="theme-toggle" id="themeToggle">
+          <span></span>
+        </button>
+      </div>
+    </div>
   </header>
 
-  <main>
-    <section class="controls">
-      <label for="schemaType">Schema Type:</label>
-      <select id="schemaType">
-        <option value="organization">Organization</option>
-        <option value="localBusiness">Local Business</option>
-        <option value="article">Article</option>
-        <option value="webpage">WebPage</option>
-      </select>
+  <main class="container">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-cog"></i> Configuration</h2>
+      </div>
+      <div class="controls-grid">
+        <div class="form-group">
+          <label for="schemaType"><i class="fas fa-tag"></i> Schema Type</label>
+          <select id="schemaType">
+            <option value="organization">Organization</option>
+            <option value="localBusiness">Local Business</option>
+            <option value="article">Article/Blog Post</option>
+            <option value="product">Product</option>
+            <option value="event">Event</option>
+            <option value="person">Person</option>
+            <option value="webpage">WebPage</option>
+          </select>
+        </div>
 
-      <label for="formatToggle">Format:</label>
-      <select id="formatToggle">
-        <option value="jsonld">JSON-LD</option>
-        <option value="microdata">Microdata</option>
-      </select>
-    </section>
+        <div class="form-group">
+          <label for="formatToggle"><i class="fas fa-code"></i> Output Format</label>
+          <select id="formatToggle">
+            <option value="jsonld">JSON-LD (Recommended)</option>
+            <option value="microdata">Microdata</option>
+          </select>
+        </div>
 
-    <section id="formContainer">
-      <!-- Dynamic form fields will be injected here -->
-    </section>
+        <div class="form-group">
+          <label for="validationToggle"><i class="fas fa-check-circle"></i> Validation</label>
+          <select id="validationToggle">
+            <option value="auto">Auto-validate</option>
+            <option value="manual">Validate on demand</option>
+          </select>
+        </div>
+      </div>
+    </div>
 
-    <section id="previewContainer">
-      <h2>🔍 Preview</h2>
-      <pre id="schemaPreview"></pre>
-      <button id="copyBtn">📋 Copy to Clipboard</button>
-    </section>
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title"><i class="fas fa-edit"></i> Properties</h2>
+      </div>
+      <div id="formContainer">
+        <!-- Dynamic form fields will be injected here -->
+        <div class="form-group">
+          <label for="orgName">Organization Name</label>
+          <input type="text" id="orgName" placeholder="e.g., Google LLC">
+        </div>
+        <div class="form-group">
+          <label for="orgUrl">Website URL</label>
+          <input type="url" id="orgUrl" placeholder="e.g., https://www.google.com">
+        </div>
+        <div class="form-group">
+          <label for="orgLogo">Logo URL</label>
+          <input type="url" id="orgLogo" placeholder="e.g., https://www.google.com/logo.png">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="preview-header">
+        <h2 class="card-title"><i class="fas fa-eye"></i> Preview</h2>
+        <span class="validation-badge" id="validationBadge">
+          <i class="fas fa-check"></i> Valid
+        </span>
+      </div>
+      <pre id="schemaPreview">{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Your Organization Name",
+  "url": "https://example.com",
+  "logo": "https://example.com/logo.png"
+}</pre>
+      
+      <div class="action-buttons">
+        <button class="btn" id="copyBtn">
+          <i class="fas fa-copy"></i> Copy to Clipboard
+        </button>
+        <button class="btn btn-success" id="validateBtn">
+          <i class="fas fa-check-circle"></i> Validate with Google
+        </button>
+        <button class="btn btn-outline" id="downloadBtn">
+          <i class="fas fa-download"></i> Download as File
+        </button>
+        <button class="btn btn-outline" id="implementBtn">
+          <i class="fas fa-code"></i> Implementation Guide
+        </button>
+      </div>
+    </div>
   </main>
 
   <footer>
-    <p>Built by Anupam • <a href="https://github.com/your-username/schema-generator" target="_blank">GitHub Repo</a></p>
+    <div class="container">
+      <div class="footer-content">
+        <p>Built with ❤️ by Anupam • SchemaPro v1.0</p>
+        <div class="footer-links">
+          <a href="https://github.com/your-username/schema-generator" target="_blank">
+            <i class="fab fa-github"></i> GitHub Repo
+          </a>
+          <a href="#"><i class="fas fa-question-circle"></i> Documentation</a>
+          <a href="#"><i class="fas fa-bug"></i> Report Issue</a>
+        </div>
+      </div>
+    </div>
   </footer>
 
-  <script src="app.js"></script>
+  <script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+
+    // Check user's preferred color scheme
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.body.classList.add('dark-mode');
+    }
+
+    // Copy to clipboard functionality
+    const copyBtn = document.getElementById('copyBtn');
+    copyBtn.addEventListener('click', () => {
+      const previewText = document.getElementById('schemaPreview').textContent;
+      navigator.clipboard.writeText(previewText).then(() => {
+        // Change button text temporarily
+        const originalHtml = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        setTimeout(() => {
+          copyBtn.innerHTML = originalHtml;
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    });
+
+    // Additional buttons functionality
+    document.getElementById('validateBtn').addEventListener('click', () => {
+      alert('Opening Google Rich Results Test tool...');
+      window.open('https://search.google.com/test/rich-results', '_blank');
+    });
+
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      alert('Download functionality would be implemented here.');
+    });
+
+    document.getElementById('implementBtn').addEventListener('click', () => {
+      alert('Opening implementation guide...');
+    });
+
+    // Simple syntax highlighting for JSON preview
+    function highlightJson(json) {
+      // This is a simple implementation - in a real app you might use a library
+      return json
+        .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?)/g, function (match) {
+          let cls = 'json-key';
+          if (/:$/.test(match)) {
+            return '<span class="' + cls + '">' + match + '</span>';
+          } else {
+            if (/^"/.test(match)) {
+              if (/:$/.test(match)) {
+                cls = 'json-key';
+              } else {
+                cls = 'json-string';
+              }
+            } else if (/true|false/.test(match)) {
+              cls = 'json-boolean';
+            } else if (/null/.test(match)) {
+              cls = 'json-null';
+            } else if (/^[0-9]+$/.test(match)) {
+              cls = 'json-number';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+          }
+        });
+    }
+
+    // Apply highlighting to the initial preview
+    const previewElement = document.getElementById('schemaPreview');
+    previewElement.innerHTML = highlightJson(previewElement.textContent);
+  </script>
 </body>
 </html>
