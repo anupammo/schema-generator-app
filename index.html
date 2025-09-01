@@ -65,15 +65,64 @@
               <!-- Dynamic form fields will be injected here -->
               <div class="mb-3">
                 <label for="orgName" class="form-label">Organization Name</label>
-                <input type="text" class="form-control" id="orgName" placeholder="e.g., Google LLC">
+                <input type="text" class="form-control" id="orgName" placeholder="e.g., Example Corporation">
               </div>
               <div class="mb-3">
                 <label for="orgUrl" class="form-label">Website URL</label>
-                <input type="url" class="form-control" id="orgUrl" placeholder="e.g., https://www.google.com">
+                <input type="url" class="form-control" id="orgUrl" placeholder="e.g., https://www.example.com">
               </div>
               <div class="mb-3">
                 <label for="orgLogo" class="form-label">Logo URL</label>
-                <input type="url" class="form-control" id="orgLogo" placeholder="e.g., https://www.google.com/logo.png">
+                <input type="url" class="form-control" id="orgLogo" placeholder="e.g., https://www.example.com/images/logo.png">
+              </div>
+              <div class="mb-3">
+                <label for="orgDescription" class="form-label">Description</label>
+                <textarea class="form-control" id="orgDescription" rows="2" placeholder="Brief description of your organization"></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="orgEmail" class="form-label">Contact Email</label>
+                <input type="email" class="form-control" id="orgEmail" placeholder="e.g., contact@example.com">
+              </div>
+              <div class="mb-3">
+                <label for="orgTelephone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="orgTelephone" placeholder="e.g., +47-99-999-9999">
+              </div>
+              <div class="mb-3">
+                <label for="orgSameAs" class="form-label">Social Media/Same As URLs (comma-separated)</label>
+                <input type="text" class="form-control" id="orgSameAs" placeholder="e.g., https://facebook.com/company, https://twitter.com/company">
+              </div>
+              <div class="mb-3">
+                <label for="orgVatID" class="form-label">VAT ID</label>
+                <input type="text" class="form-control" id="orgVatID" placeholder="e.g., FR12345678901">
+              </div>
+              <div class="mb-3">
+                <label for="orgIso6523Code" class="form-label">ISO 6523 Code</label>
+                <input type="text" class="form-control" id="orgIso6523Code" placeholder="e.g., 0199:724500PMK2A2M1SQQ228">
+              </div>
+              <h6 class="mt-4 mb-3">Address Information</h6>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="orgStreetAddress" class="form-label">Street Address</label>
+                  <input type="text" class="form-control" id="orgStreetAddress" placeholder="e.g., Rue Improbable 99">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="orgAddressLocality" class="form-label">City</label>
+                  <input type="text" class="form-control" id="orgAddressLocality" placeholder="e.g., Paris">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mb-3">
+                  <label for="orgAddressRegion" class="form-label">State/Region</label>
+                  <input type="text" class="form-control" id="orgAddressRegion" placeholder="e.g., Ile-de-France">
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="orgPostalCode" class="form-label">Postal Code</label>
+                  <input type="text" class="form-control" id="orgPostalCode" placeholder="e.g., 75001">
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label for="orgAddressCountry" class="form-label">Country Code</label>
+                  <input type="text" class="form-control" id="orgAddressCountry" placeholder="e.g., FR">
+                </div>
               </div>
             </div>
           </div>
@@ -92,9 +141,23 @@
             <pre id="schemaPreview">{
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "Your Organization Name",
-  "url": "https://example.com",
-  "logo": "https://example.com/logo.png"
+  "url": "https://www.example.com",
+  "sameAs": ["https://example.net/profile/example1234", "https://example.org/example1234"],
+  "logo": "https://www.example.com/images/logo.png",
+  "name": "Example Corporation",
+  "description": "The example corporation is well-known for producing high-quality widgets",
+  "email": "contact@example.com",
+  "telephone": "+47-99-999-9999",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Rue Improbable 99",
+    "addressLocality": "Paris",
+    "addressCountry": "FR",
+    "addressRegion": "Ile-de-France",
+    "postalCode": "75001"
+  },
+  "vatID": "FR12345678901",
+  "iso6523Code": "0199:724500PMK2A2M1SQQ228"
 }</pre>
             
             <div class="d-flex flex-wrap gap-2 mt-3">

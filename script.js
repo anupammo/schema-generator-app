@@ -98,6 +98,77 @@ function highlightJson(json) {
 const previewElement = document.getElementById('schemaPreview');
 previewElement.innerHTML = highlightJson(previewElement.textContent);
 
+// Organization form field update handlers
+function updateOrganizationSchema() {
+  const schemaType = document.getElementById('schemaType').value;
+  if (schemaType !== 'organization') return;
+  
+  const name = document.getElementById('orgName').value || 'Example Corporation';
+  const url = document.getElementById('orgUrl').value || 'https://www.example.com';
+  const logo = document.getElementById('orgLogo').value || 'https://www.example.com/images/logo.png';
+  const description = document.getElementById('orgDescription').value || 'The example corporation is well-known for producing high-quality widgets';
+  const email = document.getElementById('orgEmail').value || 'contact@example.com';
+  const telephone = document.getElementById('orgTelephone').value || '+47-99-999-9999';
+  const vatID = document.getElementById('orgVatID').value || 'FR12345678901';
+  const iso6523Code = document.getElementById('orgIso6523Code').value || '0199:724500PMK2A2M1SQQ228';
+  
+  // Handle sameAs URLs
+  const sameAsInput = document.getElementById('orgSameAs').value;
+  let sameAsArray = ['https://example.net/profile/example1234', 'https://example.org/example1234'];
+  if (sameAsInput.trim()) {
+    sameAsArray = sameAsInput.split(',').map(url => url.trim()).filter(url => url);
+  }
+  
+  // Address components
+  const streetAddress = document.getElementById('orgStreetAddress').value || 'Rue Improbable 99';
+  const addressLocality = document.getElementById('orgAddressLocality').value || 'Paris';
+  const addressRegion = document.getElementById('orgAddressRegion').value || 'Ile-de-France';
+  const postalCode = document.getElementById('orgPostalCode').value || '75001';
+  const addressCountry = document.getElementById('orgAddressCountry').value || 'FR';
+  
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "url": url,
+    "sameAs": sameAsArray,
+    "logo": logo,
+    "name": name,
+    "description": description,
+    "email": email,
+    "telephone": telephone,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": streetAddress,
+      "addressLocality": addressLocality,
+      "addressCountry": addressCountry,
+      "addressRegion": addressRegion,
+      "postalCode": postalCode
+    },
+    "vatID": vatID,
+    "iso6523Code": iso6523Code
+  };
+  
+  const previewElement = document.getElementById('schemaPreview');
+  previewElement.textContent = JSON.stringify(schema, null, 2);
+  previewElement.innerHTML = highlightJson(previewElement.textContent);
+}
+
+// Add event listeners for organization form fields
+document.addEventListener('DOMContentLoaded', function() {
+  const orgFields = [
+    'orgName', 'orgUrl', 'orgLogo', 'orgDescription', 'orgEmail', 'orgTelephone',
+    'orgSameAs', 'orgVatID', 'orgIso6523Code', 'orgStreetAddress', 'orgAddressLocality',
+    'orgAddressRegion', 'orgPostalCode', 'orgAddressCountry'
+  ];
+  
+  orgFields.forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field) {
+      field.addEventListener('input', updateOrganizationSchema);
+    }
+  });
+});
+
 // Schema type change handler
 document.getElementById('schemaType').addEventListener('change', function() {
   // In a real app, this would generate different form fields based on schema type
@@ -129,13 +200,31 @@ document.getElementById('schemaType').addEventListener('change', function() {
     "name": "Brand Name"
   }
 }`;
+  } else if (schemaType === 'organization') {
+    // Use the dynamic organization schema updater
+    updateOrganizationSchema();
+    return; // Don't apply highlighting yet, updateOrganizationSchema will do it
   } else {
     previewElement.textContent = `{
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "Your Organization Name",
-  "url": "https://example.com",
-  "logo": "https://example.com/logo.png"
+  "url": "https://www.example.com",
+  "sameAs": ["https://example.net/profile/example1234", "https://example.org/example1234"],
+  "logo": "https://www.example.com/images/logo.png",
+  "name": "Example Corporation",
+  "description": "The example corporation is well-known for producing high-quality widgets",
+  "email": "contact@example.com",
+  "telephone": "+47-99-999-9999",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Rue Improbable 99",
+    "addressLocality": "Paris",
+    "addressCountry": "FR",
+    "addressRegion": "Ile-de-France",
+    "postalCode": "75001"
+  },
+  "vatID": "FR12345678901",
+  "iso6523Code": "0199:724500PMK2A2M1SQQ228"
 }`;
   }
   
